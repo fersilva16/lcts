@@ -2,15 +2,15 @@ import { Letter } from './char';
 
 export type TVar<N extends Letter> = `TVar(${N})`;
 
-export type TLambda = 'λ';
+export type TLambda = 'TLambda';
 
-export type TLeftPar = '(';
+export type TLeftPar = 'TLeftPar';
 
-export type TRightPar = ')';
+export type TRightPar = 'TRightPar';
 
-export type TDot = '.';
+export type TDot = 'TDot';
 
-export type TSpace = ' ';
+export type TSpace = 'TSpace';
 
 export type Token =
   | TVar<Letter>
