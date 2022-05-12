@@ -1,0 +1,7 @@
+{
+  "name": "lambda-calculus-on-type-system",
+  "version": "1.0.0",
+  "description": "Lambda Calculus Interpreter on TypeScript's type system",
+  "author": "Fernando Silva <fernandonsilva16@gmail.com>",
+  "license": "MIT"
+}
