@@ -1,4 +1,4 @@
-import type { Equal, Expect, NotEqual } from '@type-challenges/utils';
+import type { Equal, Expect } from '@type-challenges/utils';
 import type { Abs, App, Var } from '../expr';
 import type { Interp } from '../interp';
 
