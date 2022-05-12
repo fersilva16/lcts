@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "description": "Lambda Calculus Interpreter on TypeScript's type system",
   "author": "Fernando Silva <fernandonsilva16@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
 }
