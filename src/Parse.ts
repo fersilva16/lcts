@@ -6,8 +6,8 @@ import type {
   TRightPar,
   TSpace,
   TVar,
-} from './token';
-import type { Abs, App, Expr, Var } from './expr';
+} from './Token';
+import type { Abs, App, Expr, Var } from './Expr';
 
 export type Assert<X, T> = X extends T ? X : never;
 

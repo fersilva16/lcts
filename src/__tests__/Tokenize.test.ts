@@ -6,8 +6,8 @@ import type {
   TRightPar,
   TSpace,
   TVar,
-} from '../token';
-import type { Tokenize } from '../tokenize';
+} from '../Token';
+import type { Tokenize } from '../Tokenize';
 
 type cases = [
   Expect<Equal<Tokenize<'y'>, [TVar<'y'>]>>,

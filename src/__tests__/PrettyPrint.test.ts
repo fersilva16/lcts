@@ -1,6 +1,6 @@
 import type { Equal, Expect } from '@type-challenges/utils';
-import type { Abs, App, Var } from '../expr';
-import type { PrettyPrint } from '../prettyPrint';
+import type { Abs, App, Var } from '../Expr';
+import type { PrettyPrint } from '../PrettyPrint';
 
 type Y = Var<'y'>;
 type X = Var<'x'>;
