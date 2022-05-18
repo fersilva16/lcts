@@ -7,9 +7,9 @@ import type {
   TRightPar,
   TSpace,
   TVar,
-} from '../token';
-import type { Parse } from '../parse';
-import type { Abs, App, Var } from '../expr';
+} from '../Token';
+import type { Parse } from '../Parse';
+import type { Abs, App, Var } from '../Expr';
 
 type TY = [TVar<'y'>];
 type Y = Var<'y'>;

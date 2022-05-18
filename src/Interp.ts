@@ -1,4 +1,4 @@
-import type { Abs, App, Expr, Var } from './expr';
+import type { Abs, App, Expr, Var } from './Expr';
 
 type Substitute<
   N extends string,

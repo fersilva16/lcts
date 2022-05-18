@@ -1,4 +1,4 @@
-import { Letter } from './char';
+import { Letter } from './Char';
 
 export type TVar<N extends Letter> = `TVar(${N})`;
 
