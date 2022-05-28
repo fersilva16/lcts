@@ -4,8 +4,7 @@ import type { Abs, App, Arg, Body, Expr, Func, Var } from './data/Expr';
 export type PrettyPrint<E extends Expr> = E extends Var<infer N>
   ? N
   : E extends Abs<infer P, App<Var<string>, Var<string>>>
-  ? // @ts-expect-error
-    `${Lambda}${P}${Dot}${PrettyPrint<Body<E>>}`
+  ? `${Lambda}${P}${Dot}${PrettyPrint<Body<E>>}`
   : E extends Abs<infer P, App<Expr, Expr>>
   ? `${Lambda}${P}${Dot}${LeftPar}${PrettyPrint<Body<E>>}${RightPar}`
   : E extends Abs<infer P, infer B>

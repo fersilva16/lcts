@@ -1,4 +1,5 @@
 import type { Equal, Expect } from '@type-challenges/utils';
+
 import type { Abs, App, Var } from '../data/Expr';
 import type { PrettyPrint } from '../PrettyPrint';
 

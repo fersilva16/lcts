@@ -5,10 +5,16 @@
   "author": "Fernando Silva <fernandonsilva16@gmail.com>",
   "license": "MIT",
   "scripts": {
+    "lint": "eslint .",
     "test": "tsc"
   },
   "devDependencies": {
     "@type-challenges/utils": "^0.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "eslint": "^8.16.0",
+    "eslint-import-resolver-typescript": "^2.7.1",
+    "eslint-plugin-import": "^2.26.0",
     "typescript": "^4.6.4"
   }
 }
