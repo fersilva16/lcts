@@ -1,4 +1,5 @@
 import type { Equal, Expect } from '@type-challenges/utils';
+import type { Abs, App, Var } from '../data/Expr';
 import type {
   TDot,
   TLambda,
@@ -7,9 +8,8 @@ import type {
   TRightPar,
   TSpace,
   TVar,
-} from '../Token';
+} from '../data/Token';
 import type { Parse } from '../Parse';
-import type { Abs, App, Var } from '../Expr';
 
 type TY = [TVar<'y'>];
 type Y = Var<'y'>;

@@ -1,3 +1,4 @@
+import type { Abs, App, Expr, Var } from './data/Expr';
 import type {
   TDot,
   TLambda,
@@ -6,8 +7,7 @@ import type {
   TRightPar,
   TSpace,
   TVar,
-} from './Token';
-import type { Abs, App, Expr, Var } from './Expr';
+} from './data/Token';
 
 export type Assert<X, T> = X extends T ? X : never;
 

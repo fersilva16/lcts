@@ -1,4 +1,4 @@
-import type { Expr } from './Expr';
+import type { Expr } from './data/Expr';
 import type { Interp } from './Interp';
 import type { Assert, Parse } from './Parse';
 import { PrettyPrint } from './PrettyPrint';
