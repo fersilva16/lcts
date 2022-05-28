@@ -25,5 +25,7 @@ type cases = [
   Expect<Equal<PrettyPrint<App<XApp, XApp>>, '(x x) (x x)'>>,
   Expect<Equal<PrettyPrint<YAbs>, 'λy.y y'>>,
   Expect<Equal<PrettyPrint<YCombinator>, '(λy.y y) λy.y y'>>,
-  Expect<Equal<PrettyPrint<Abs<'x', Abs<'y', XApp>>>, 'λx.λy.x x'>>
+  Expect<Equal<PrettyPrint<Abs<'x', Abs<'y', XApp>>>, 'λx.λy.x x'>>,
+  Expect<Equal<PrettyPrint<Abs<'x', App<X, Id>>>, 'λx.(x λy.y)'>>,
+  Expect<Equal<PrettyPrint<Abs<'x', App<X, XYApp>>>, 'λx.(x (x y))'>>
 ];
