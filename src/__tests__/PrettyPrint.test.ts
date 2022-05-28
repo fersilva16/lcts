@@ -20,6 +20,8 @@ type cases = [
   Expect<Equal<PrettyPrint<App<Id, X>>, '(λy.y) x'>>,
   Expect<Equal<PrettyPrint<App<Id, Id>>, '(λy.y) λy.y'>>,
   Expect<Equal<PrettyPrint<App<XApp, Y>>, '(x x) y'>>,
+  Expect<Equal<PrettyPrint<App<Y, XApp>>, 'y (x x)'>>,
+  Expect<Equal<PrettyPrint<App<X, Id>>, 'x λy.y'>>,
   Expect<Equal<PrettyPrint<App<XApp, XApp>>, '(x x) (x x)'>>,
   Expect<Equal<PrettyPrint<YAbs>, 'λy.y y'>>,
   Expect<Equal<PrettyPrint<YCombinator>, '(λy.y y) λy.y y'>>,
