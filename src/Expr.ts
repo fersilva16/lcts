@@ -16,3 +16,11 @@ export type App<F extends Expr, A extends Expr> = {
 };
 
 export type Expr = Var<any> | Abs<any, any> | App<any, any>;
+
+export type Param<A extends Abs<string, Expr>> = A['param'];
+
+export type Body<A extends Abs<string, Expr>> = A['body'];
+
+export type Func<A extends App<Expr, Expr>> = A['func'];
+
+export type Arg<A extends App<Expr, Expr>> = A['arg'];
