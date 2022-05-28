@@ -1,5 +1,5 @@
-import type { Dot, Lambda, LeftPar, Letter, RightPar, Space } from './Char';
-import type { TDot, TLambda, TLeftPar, TRightPar, TSpace, TVar } from './Token';
+import type { Dot, Lambda, LeftPar, Letter, RightPar, Space } from './data/Char';
+import type { TDot, TLambda, TLeftPar, TRightPar, TSpace, TVar } from './data/Token';
 
 export type Tokenize<CS extends string> = CS extends `${infer C}${infer R}`
   ? [

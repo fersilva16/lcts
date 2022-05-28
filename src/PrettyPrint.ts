@@ -1,5 +1,5 @@
-import type { Dot, Lambda, LeftPar, RightPar, Space } from './Char';
-import type { Abs, App, Arg, Body, Expr, Func, Var } from './Expr';
+import type { Dot, Lambda, LeftPar, RightPar, Space } from './data/Char';
+import type { Abs, App, Arg, Body, Expr, Func, Var } from './data/Expr';
 
 export type PrettyPrint<E extends Expr> = E extends Var<infer N>
   ? N
