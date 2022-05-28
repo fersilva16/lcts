@@ -1,6 +1,6 @@
 import type { Expr } from './data/Expr';
 import type { Interp } from './Interp';
-import type { Assert, Parse } from './Parse';
+import type { Parse } from './Parse';
 import type { PrettyPrint } from './PrettyPrint';
 import type { Tokenize } from './Tokenize';
 
