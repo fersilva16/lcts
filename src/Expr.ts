@@ -17,6 +17,8 @@ export type App<F extends Expr, A extends Expr> = {
 
 export type Expr = Var<any> | Abs<any, any> | App<any, any>;
 
+export type Name<A extends Var<string>> = A['name'];
+
 export type Param<A extends Abs<string, Expr>> = A['param'];
 
 export type Body<A extends Abs<string, Expr>> = A['body'];
