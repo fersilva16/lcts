@@ -10,6 +10,8 @@ export type PrettyPrint<E extends Expr> = E extends Var<infer N>
   ? `${LeftPar}${PrettyPrint<
       Func<E>
     >}${RightPar}${Space}${LeftPar}${PrettyPrint<Arg<E>>}${RightPar}`
+  : E extends App<Var<string>, App<Expr, Expr>>
+  ? `${PrettyPrint<Func<E>>}${Space}${LeftPar}${PrettyPrint<Arg<E>>}${RightPar}`
   : E extends App<Abs<string, Expr> | App<Expr, Expr>, infer A>
   ? `${LeftPar}${PrettyPrint<Func<E>>}${RightPar}${Space}${PrettyPrint<A>}`
   : E extends App<infer F, infer A>
