@@ -8,8 +8,7 @@ import type {
   TSpace,
   TVar,
 } from './data/Token';
-
-export type Assert<X, T> = X extends T ? X : never;
+import type { Assert } from './utils/Assert';
 
 export type ParseVar<TS extends Token[]> = TS extends [
   TVar<infer N>,
