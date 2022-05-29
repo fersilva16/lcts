@@ -11,45 +11,40 @@ import type {
   TVar,
 } from '../data/Token';
 import type { Parse } from '../Parse';
+import { Tokenize } from '../Tokenize';
 
-type TY = [TVar<'y'>];
+type TParse<S extends string> = Parse<Tokenize<S>>;
+
 type Y = Var<'y'>;
-
-type TX = [TVar<'x'>];
 type X = Var<'x'>;
-
-type TAbs<E1 extends Token[], E2 extends Token[]> = [
-  TLambda,
-  ...E1,
-  TDot,
-  ...E2
-];
-
-type TId = TAbs<TY, TY>;
 type Id = Abs<'y', Y>;
-
-type TApp<E1 extends Token[], E2 extends Token[]> = [
-  TLeftPar,
-  ...E1,
-  TRightPar,
-  TSpace,
-  ...E2
-];
-
-type TYAbs = TAbs<TY, TApp<TY, TY>>;
+type XApp = App<X, X>;
+type XYApp = App<X, Y>;
 type YAbs = Abs<'y', App<Y, Y>>;
-
-type TYCombinator = TApp<TYAbs, TYAbs>;
 type YCombinator = App<YAbs, YAbs>;
 
-type BetweenPar<T extends Token[]> = [TLeftPar, ...T, TRightPar];
-
 type cases = [
-  Expect<Equal<Parse<TY>, [Y, []]>>,
-  Expect<Equal<Parse<BetweenPar<TY>>, [Y, []]>>,
-  Expect<Equal<Parse<TId>, [Id, []]>>,
-  Expect<Equal<Parse<BetweenPar<TId>>, [Id, []]>>,
-  Expect<Equal<Parse<TApp<TId, TX>>, [App<Id, X>, []]>>,
-  Expect<Equal<Parse<TYAbs>, [YAbs, []]>>,
-  Expect<Equal<Parse<TYCombinator>, [YCombinator, []]>>
+  Expect<Equal<TParse<'y'>, [Y, []]>>,
+  Expect<Equal<TParse<'x'>, [X, []]>>,
+  Expect<Equal<TParse<'(y)'>, [Y, []]>>,
+  Expect<Equal<TParse<'λy.y'>, [Id, []]>>,
+  Expect<Equal<TParse<'(λy.y)'>, [Id, []]>>,
+  Expect<Equal<TParse<'y (λy.y)'>, [Abs<'y', Id>, []]>>,
+  Expect<Equal<TParse<'(y) (λy.y)'>, [Abs<'y', Id>, []]>>,
+  Expect<Equal<TParse<'y (x y)'>, [Abs<'y', XYApp>, []]>>,
+  Expect<Equal<TParse<'(y) (x y)'>, [Abs<'y', XYApp>, []]>>,
+  Expect<Equal<TParse<'x y'>, [XYApp, []]>>,
+  Expect<Equal<TParse<'x (y)'>, [XYApp, []]>>,
+  Expect<Equal<TParse<'(x) y'>, [XYApp, []]>>,
+  Expect<Equal<TParse<'λy.y x'>, [App<Id, X>, []]>>,
+  Expect<Equal<TParse<'λy.y λy.y'>, [App<Id, Id>, []]>>,
+  Expect<Equal<TParse<'(x x) y'>, [App<XApp, Y>, []]>>,
+  Expect<Equal<TParse<'y (x x)'>, [App<Y, XApp>, []]>>,
+  Expect<Equal<TParse<'x λy.y'>, [App<X, Id>, []]>>,
+  Expect<Equal<TParse<'(x x) (x x)'>, [App<XApp, XApp>, []]>>,
+  Expect<Equal<TParse<'λy.y y'>, [YAbs, []]>>,
+  Expect<Equal<TParse<'(λy.y y) λy.y y'>, [YCombinator, []]>>,
+  Expect<Equal<TParse<'λx.λy.x x'>, [Abs<'x', Abs<'y', XApp>>, []]>>,
+  Expect<Equal<TParse<'λx.(x λy.y)'>, [Abs<'x', App<X, Id>>, []]>>,
+  Expect<Equal<TParse<'λx.(x (x y))'>, [Abs<'x', App<X, XYApp>>, []]>>
 ];
