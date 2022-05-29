@@ -13,11 +13,21 @@
         "varsIgnorePattern": "^cases"
       }
     ],
-    
+
+    "@typescript-eslint/consistent-type-imports": [
+      "error",
+      {
+        "prefer": "type-imports"
+      }
+    ],
+
     "import/order": [
       "error",
       {
-        "groups": [["builtin", "external"], ["parent", "sibling", "index"]],
+        "groups": [
+          ["builtin", "external"],
+          ["parent", "sibling", "index"]
+        ],
 
         "alphabetize": {
           "order": "asc",

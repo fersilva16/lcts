@@ -11,7 +11,7 @@ import type {
   TVar,
 } from '../data/Token';
 import type { Parse } from '../Parse';
-import { Tokenize } from '../Tokenize';
+import type { Tokenize } from '../Tokenize';
 
 type TParse<S extends string> = Parse<Tokenize<S>>;
 
