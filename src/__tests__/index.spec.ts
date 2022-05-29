@@ -5,7 +5,9 @@ import type { LambdaCalculus } from '..';
 type cases = [
   Expect<Equal<LambdaCalculus<'y'>, 'y'>>,
   Expect<Equal<LambdaCalculus<'x'>, 'x'>>,
+  Expect<Equal<LambdaCalculus<'  x    '>, 'x'>>,
   Expect<Equal<LambdaCalculus<'λy.y'>, 'λy.y'>>,
+  Expect<Equal<LambdaCalculus<'   λy.y  '>, 'λy.y'>>,
   Expect<Equal<LambdaCalculus<'λy.λy.y'>, 'λy.λy.y'>>,
   Expect<Equal<LambdaCalculus<'λx.x y'>, 'λx.x y'>>,
   Expect<Equal<LambdaCalculus<'(λy.y) x'>, 'x'>>,
