@@ -1,6 +1,6 @@
 import type { Equal, Expect } from '@type-challenges/utils';
 
-import { ReverseString } from '../ReverseString';
+import type { ReverseString } from '../ReverseString';
 
 type cases = [
   Expect<Equal<ReverseString<'something'>, 'gnihtemos'>>,

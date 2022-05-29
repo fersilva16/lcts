@@ -1,6 +1,6 @@
 import type { Equal, Expect } from '@type-challenges/utils';
 
-import { Letter } from '../data/Char';
+import type { Letter } from '../data/Char';
 import type {
   TDot,
   TLambda,
