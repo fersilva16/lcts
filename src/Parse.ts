@@ -9,49 +9,69 @@ import type {
   TVar,
 } from './data/Token';
 import type { Assert } from './utils/Assert';
+import type { TakeLast } from './utils/TakeLast';
 
-export type ParseVar<TS extends Token[]> = TS extends [
-  TVar<infer N>,
+type State = Array<Token | Expr>;
+
+type ParseVar<S extends State> = S extends [TVar<infer N>] ? Var<N> : never;
+
+type ParseAbs<S extends State, TS extends Token[]> = S extends [
+  TLambda,
+  Var<infer P>,
+  TDot,
+  Expr
+]
+  ? TS[0] extends TSpace
+    ? TS[1] extends TLambda
+      ? Abs<P, Assert<S[3], Expr>>
+      : TS[1] extends TLeftPar
+      ? Abs<P, Assert<S[3], Expr>>
+      : never
+    : Abs<P, Assert<S[3], Expr>>
+  : never;
+
+type ParseApp<S extends State> = S extends [Expr, TSpace, Expr]
+  ? App<Assert<S[0], Expr>, Assert<S[2], Expr>>
+  : never;
+
+type ParseParen<S extends State> = S extends [TLeftPar, Expr, TRightPar]
+  ? S[1]
+  : never;
+
+type TryParse<S extends State, TS extends Token[]> =
+  | ParseParen<S>
+  | ParseApp<S>
+  | ParseAbs<S, TS>
+  | ParseVar<S>;
+
+type Reduce<
+  S extends State,
+  CS extends State,
+  TS extends Token[]
+> = S['length'] extends 0
+  ? [CS, TS]
+  : TakeLast<S> extends [infer LS, infer L]
+  ? TryParse<Assert<[L, ...CS], State>, TS> extends never
+    ? Reduce<Assert<LS, State>, Assert<[L, ...CS], State>, TS>
+    : Reduce<
+        [...Assert<LS, State>, TryParse<Assert<[L, ...CS], State>, TS>],
+        [],
+        TS
+      >
+  : [CS, TS];
+
+type Shift<S extends State, TS extends Token[]> = TS extends [
+  infer T,
   ...infer R
 ]
-  ? [Var<N>, R]
-  : never;
-
-export type ParseAbs<TS extends Token[]> = TS extends [
-  TLambda,
-  TVar<infer N>,
-  TDot,
-  ...infer R1
-]
-  ? Parse<Assert<R1, Token[]>> extends [infer E, infer R2]
-    ? [Abs<N, Assert<E, Expr>>, R2]
+  ? Reduce<Assert<[...S, T], State>, [], Assert<R, Token[]>> extends [
+      infer NS,
+      infer NTS
+    ]
+    ? Shift<Assert<NS, State>, Assert<NTS, Token[]>>
     : never
+  : S['length'] extends 1
+  ? [S[0], []]
   : never;
 
-export type ParseApp<TS extends Token[]> = TS extends [TLeftPar, ...infer R1]
-  ? Parse<Assert<R1, Token[]>> extends [infer E1, infer R2]
-    ? R2 extends [TRightPar, TSpace, ...infer R3]
-      ? Parse<Assert<R3, Token[]>> extends [infer E2, infer R4]
-        ? [App<Assert<E1, Expr>, Assert<E2, Expr>>, R4]
-        : never
-      : never
-    : never
-  : never;
-
-export type ParsePar<TS extends Token[]> = TS extends [TLeftPar, ...infer R1]
-  ? Parse<Assert<R1, Token[]>> extends [infer E, infer R2]
-    ? R2 extends [TRightPar, ...infer R3]
-      ? [E, R3]
-      : never
-    : never
-  : never;
-
-export type Parse<TS extends Token[]> = ParseVar<TS> extends never
-  ? ParseAbs<TS> extends never
-    ? ParseApp<TS> extends never
-      ? ParsePar<TS> extends never
-        ? never
-        : ParsePar<TS>
-      : ParseApp<TS>
-    : ParseAbs<TS>
-  : ParseVar<TS>;
+export type Parse<TS extends Token[]> = Shift<[], TS>;
