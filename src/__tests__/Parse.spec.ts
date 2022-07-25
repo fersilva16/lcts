@@ -1,15 +1,6 @@
 import type { Equal, Expect } from '@type-challenges/utils';
 
 import type { Abs, App, Var } from '../data/Expr';
-import type {
-  TDot,
-  TLambda,
-  TLeftPar,
-  Token,
-  TRightPar,
-  TSpace,
-  TVar,
-} from '../data/Token';
 import type { Parse } from '../Parse';
 import type { Tokenize } from '../Tokenize';
 
