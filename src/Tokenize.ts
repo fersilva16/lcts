@@ -1,34 +1,34 @@
 import type {
-  Dot,
-  Lambda,
-  LeftPar,
-  Letter,
-  RightPar,
-  Space,
+  CDot,
+  CLambda,
+  CLeftPar,
+  CLetter,
+  CRightPar,
+  CSpace,
 } from './data/Char';
 import type {
-  TDot,
-  TLambda,
-  TLeftPar,
-  TRightPar,
-  TSpace,
-  TVar,
+  TkDot,
+  TkLambda,
+  TkLeftPar,
+  TkRightPar,
+  TkSpace,
+  TkVar,
 } from './data/Token';
 
 export type Tokenize<CS extends string> = CS extends `${infer C}${infer R}`
   ? [
-      C extends Letter
-        ? TVar<C>
-        : C extends Lambda
-        ? TLambda
-        : C extends LeftPar
-        ? TLeftPar
-        : C extends RightPar
-        ? TRightPar
-        : C extends Dot
-        ? TDot
-        : C extends Space
-        ? TSpace
+      C extends CLetter
+        ? TkVar<C>
+        : C extends CLambda
+        ? TkLambda
+        : C extends CLeftPar
+        ? TkLeftPar
+        : C extends CRightPar
+        ? TkRightPar
+        : C extends CDot
+        ? TkDot
+        : C extends CSpace
+        ? TkSpace
         : never,
       ...Tokenize<R>
     ]

@@ -1,7 +1,7 @@
-import type { Space } from '../data/Char';
+import type { CSpace } from '../data/Char';
 import type { ReverseString } from './ReverseString';
 
-export type TrimStart<S extends string> = S extends `${Space}${infer R}`
+export type TrimStart<S extends string> = S extends `${CSpace}${infer R}`
   ? TrimStart<R>
   : S;
 

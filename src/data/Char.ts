@@ -1,4 +1,4 @@
-export type Letter =
+export type CLetter =
   | 'a'
   | 'b'
   | 'c'
@@ -26,14 +26,14 @@ export type Letter =
   | 'y'
   | 'z';
 
-export type Lambda = 'λ';
+export type CLambda = 'λ';
 
-export type LeftPar = '(';
+export type CLeftPar = '(';
 
-export type RightPar = ')';
+export type CRightPar = ')';
 
-export type Dot = '.';
+export type CDot = '.';
 
-export type Space = ' ';
+export type CSpace = ' ';
 
-export type Char = Letter | Lambda | LeftPar | RightPar | Dot | Space;
+export type Char = CLetter | CLambda | CLeftPar | CRightPar | CDot | CSpace;
