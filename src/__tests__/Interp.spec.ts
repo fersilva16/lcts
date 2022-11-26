@@ -1,10 +1,10 @@
 import type { Equal, Expect } from '@type-challenges/utils';
 
-import type { Abs, App, Var } from '../data/Expr';
+import type { EAbs, EApp, EVar } from '../data/Expr';
 import type { Interp } from '../Interp';
 
 type cases = [
-  Expect<Equal<Interp<Var<'y'>>, Var<'y'>>>,
-  Expect<Equal<Interp<Abs<'y', Var<'y'>>>, Abs<'y', Var<'y'>>>>,
-  Expect<Equal<Interp<App<Abs<'x', Var<'x'>>, Var<'y'>>>, Var<'y'>>>
+  Expect<Equal<Interp<EVar<'y'>>, EVar<'y'>>>,
+  Expect<Equal<Interp<EAbs<'y', EVar<'y'>>>, EAbs<'y', EVar<'y'>>>>,
+  Expect<Equal<Interp<EApp<EAbs<'x', EVar<'x'>>, EVar<'y'>>>, EVar<'y'>>>
 ];

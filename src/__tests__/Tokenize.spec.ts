@@ -1,28 +1,28 @@
 import type { Equal, Expect } from '@type-challenges/utils';
 
-import type { Letter } from '../data/Char';
+import type { CLetter } from '../data/Char';
 import type {
-  TDot,
-  TLambda,
-  TLeftPar,
+  TkDot,
+  TkLambda,
+  TkLeftPar,
   Token,
-  TRightPar,
-  TSpace,
-  TVar,
+  TkRightPar,
+  TkSpace,
+  TkVar,
 } from '../data/Token';
 import type { Tokenize } from '../Tokenize';
 
-type TPar<TS extends Token[]> = [TLeftPar, ...TS, TRightPar];
-type TAbs<P extends Letter, TS extends Token[]> = [
-  TLambda,
-  TVar<P>,
-  TDot,
+type TPar<TS extends Token[]> = [TkLeftPar, ...TS, TkRightPar];
+type TAbs<P extends CLetter, TS extends Token[]> = [
+  TkLambda,
+  TkVar<P>,
+  TkDot,
   ...TS
 ];
-type TApp<FTS extends Token[], ATS extends Token[]> = [...FTS, TSpace, ...ATS];
+type TApp<FTS extends Token[], ATS extends Token[]> = [...FTS, TkSpace, ...ATS];
 
-type TY = [TVar<'y'>];
-type TX = [TVar<'x'>];
+type TY = [TkVar<'y'>];
+type TX = [TkVar<'x'>];
 type TId = TAbs<'y', TY>;
 type TXYApp = TPar<TApp<TX, TY>>;
 type TXApp = TPar<TApp<TX, TX>>;

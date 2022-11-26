@@ -1,22 +1,24 @@
-import type { Dot, Lambda, LeftPar, RightPar, Space } from './data/Char';
-import type { Abs, App, Arg, Body, Expr, Func, Var } from './data/Expr';
+import type { CDot, CLambda, CLeftPar, CRightPar, CSpace } from './data/Char';
+import type { EAbs, EApp, EArg, EBody, Expr, EFunc, EVar } from './data/Expr';
 
-export type PrettyPrint<E extends Expr> = E extends Var<infer N>
+export type PrettyPrint<E extends Expr> = E extends EVar<infer N>
   ? N
-  : E extends Abs<infer P, App<Var<string>, Var<string>>>
-  ? `${Lambda}${P}${Dot}${PrettyPrint<Body<E>>}`
-  : E extends Abs<infer P, App<Expr, Expr>>
-  ? `${Lambda}${P}${Dot}${LeftPar}${PrettyPrint<Body<E>>}${RightPar}`
-  : E extends Abs<infer P, infer B>
-  ? `${Lambda}${P}${Dot}${PrettyPrint<B>}`
-  : E extends App<App<Expr, Expr>, App<Expr, Expr>>
-  ? `${LeftPar}${PrettyPrint<
-      Func<E>
-    >}${RightPar}${Space}${LeftPar}${PrettyPrint<Arg<E>>}${RightPar}`
-  : E extends App<Var<string>, App<Expr, Expr>>
-  ? `${PrettyPrint<Func<E>>}${Space}${LeftPar}${PrettyPrint<Arg<E>>}${RightPar}`
-  : E extends App<Abs<string, Expr> | App<Expr, Expr>, infer A>
-  ? `${LeftPar}${PrettyPrint<Func<E>>}${RightPar}${Space}${PrettyPrint<A>}`
-  : E extends App<infer F, infer A>
-  ? `${PrettyPrint<F>}${Space}${PrettyPrint<A>}`
+  : E extends EAbs<infer P, EApp<EVar<string>, EVar<string>>>
+  ? `${CLambda}${P}${CDot}${PrettyPrint<EBody<E>>}`
+  : E extends EAbs<infer P, EApp<Expr, Expr>>
+  ? `${CLambda}${P}${CDot}${CLeftPar}${PrettyPrint<EBody<E>>}${CRightPar}`
+  : E extends EAbs<infer P, infer B>
+  ? `${CLambda}${P}${CDot}${PrettyPrint<B>}`
+  : E extends EApp<EApp<Expr, Expr>, EApp<Expr, Expr>>
+  ? `${CLeftPar}${PrettyPrint<
+      EFunc<E>
+    >}${CRightPar}${CSpace}${CLeftPar}${PrettyPrint<EArg<E>>}${CRightPar}`
+  : E extends EApp<EVar<string>, EApp<Expr, Expr>>
+  ? `${PrettyPrint<EFunc<E>>}${CSpace}${CLeftPar}${PrettyPrint<
+      EArg<E>
+    >}${CRightPar}`
+  : E extends EApp<EAbs<string, Expr> | EApp<Expr, Expr>, infer A>
+  ? `${CLeftPar}${PrettyPrint<EFunc<E>>}${CRightPar}${CSpace}${PrettyPrint<A>}`
+  : E extends EApp<infer F, infer A>
+  ? `${PrettyPrint<F>}${CSpace}${PrettyPrint<A>}`
   : never;

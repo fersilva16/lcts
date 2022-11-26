@@ -1,40 +1,40 @@
-import type { Abs, App, Expr, Var } from './data/Expr';
+import type { EAbs, EApp, Expr, EVar } from './data/Expr';
 import type {
-  TDot,
-  TLambda,
-  TLeftPar,
+  TkDot,
+  TkLambda,
+  TkLeftPar,
   Token,
-  TRightPar,
-  TSpace,
-  TVar,
+  TkRightPar,
+  TkSpace,
+  TkVar,
 } from './data/Token';
 import type { Assert } from './utils/Assert';
 import type { TakeLast } from './utils/TakeLast';
 
 type State = Array<Token | Expr>;
 
-type ParseVar<S extends State> = S extends [TVar<infer N>] ? Var<N> : never;
+type ParseVar<S extends State> = S extends [TkVar<infer N>] ? EVar<N> : never;
 
 type ParseAbs<S extends State, TS extends Token[]> = S extends [
-  TLambda,
-  Var<infer P>,
-  TDot,
+  TkLambda,
+  EVar<infer P>,
+  TkDot,
   Expr
 ]
-  ? TS[0] extends TSpace
-    ? TS[1] extends TLambda
-      ? Abs<P, Assert<S[3], Expr>>
-      : TS[1] extends TLeftPar
-      ? Abs<P, Assert<S[3], Expr>>
+  ? TS[0] extends TkSpace
+    ? TS[1] extends TkLambda
+      ? EAbs<P, Assert<S[3], Expr>>
+      : TS[1] extends TkLeftPar
+      ? EAbs<P, Assert<S[3], Expr>>
       : never
-    : Abs<P, Assert<S[3], Expr>>
+    : EAbs<P, Assert<S[3], Expr>>
   : never;
 
-type ParseApp<S extends State> = S extends [Expr, TSpace, Expr]
-  ? App<Assert<S[0], Expr>, Assert<S[2], Expr>>
+type ParseApp<S extends State> = S extends [Expr, TkSpace, Expr]
+  ? EApp<Assert<S[0], Expr>, Assert<S[2], Expr>>
   : never;
 
-type ParseParen<S extends State> = S extends [TLeftPar, Expr, TRightPar]
+type ParseParen<S extends State> = S extends [TkLeftPar, Expr, TkRightPar]
   ? S[1]
   : never;
 
