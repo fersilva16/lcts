@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "eslint .",
-    "test": "tsc"
+    "test": "tsc --noEmit"
   },
   "devDependencies": {
     "@type-challenges/utils": "^0.1.1",
