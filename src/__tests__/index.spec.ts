@@ -15,9 +15,14 @@ type cases = [
   Expect<Equal<LambdaCalculus<'(x x) y'>, '(x x) y'>>,
   Expect<Equal<LambdaCalculus<'x λy.y'>, 'x λy.y'>>,
   Expect<Equal<LambdaCalculus<'y (x x)'>, 'y (x x)'>>,
-  Expect<Equal<LambdaCalculus<'(λy.y y) λy.y y'>, '(λy.y y) λy.y y'>>,
   Expect<Equal<LambdaCalculus<'(x x) (x x)'>, '(x x) (x x)'>>,
   Expect<Equal<LambdaCalculus<'λx.λy.x x'>, 'λx.λy.x x'>>,
   Expect<Equal<LambdaCalculus<'λx.(x λy.y)'>, 'λx.(x λy.y)'>>,
-  Expect<Equal<LambdaCalculus<'λx.(x (x y))'>, 'λx.(x (x y))'>>
+  Expect<Equal<LambdaCalculus<'λx.(x (x y))'>, 'λx.(x (x y))'>>,
+  Expect<Equal<LambdaCalculus<'(λx.x y) (λx.x)'>, 'y'>>,
+  Expect<Equal<LambdaCalculus<'((λx.λx.x) y) z'>, 'z'>>,
+  Expect<Equal<LambdaCalculus<'λx.(λy.x z)'>, 'λx.x'>>,
+
+  // infinite
+  // Expect<Equal<LambdaCalculus<'(λy.y y) λy.y y'>, '(λy.y y) λy.y y'>>,
 ];
