@@ -21,7 +21,7 @@ type cases = [
   Expect<Equal<LambdaCalculus<'λx.(x (x y))'>, 'λx.(x (x y))'>>,
   Expect<Equal<LambdaCalculus<'(λx.x y) (λx.x)'>, 'y'>>,
   Expect<Equal<LambdaCalculus<'((λx.λx.x) y) z'>, 'z'>>,
-  Expect<Equal<LambdaCalculus<'λx.(λy.x z)'>, 'λx.x'>>,
+  Expect<Equal<LambdaCalculus<'λx.(λy.x) z'>, 'λx.x'>>,
 
   // infinite
   // Expect<Equal<LambdaCalculus<'(λy.y y) λy.y y'>, '(λy.y y) λy.y y'>>,
