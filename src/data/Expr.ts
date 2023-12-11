@@ -17,12 +17,12 @@ export type EApp<F extends Expr, A extends Expr> = {
 
 export type Expr = EVar<any> | EAbs<any, any> | EApp<any, any>;
 
-export type EName<A extends EVar<string>> = A['name'];
+export type GetEName<A extends EVar<string>> = A['name'];
 
-export type EParam<A extends EAbs<string, Expr>> = A['param'];
+export type GetEParam<A extends EAbs<string, Expr>> = A['param'];
 
-export type EBody<A extends EAbs<string, Expr>> = A['body'];
+export type GetEBody<A extends EAbs<string, Expr>> = A['body'];
 
-export type EFunc<A extends EApp<Expr, Expr>> = A['func'];
+export type GetEFunc<A extends EApp<Expr, Expr>> = A['func'];
 
-export type EArg<A extends EApp<Expr, Expr>> = A['arg'];
+export type GetEArg<A extends EApp<Expr, Expr>> = A['arg'];
