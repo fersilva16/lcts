@@ -8,7 +8,6 @@ import type {
   TkSpace,
   TkVar,
 } from './data/Token';
-import type { Assert } from './utils/Assert';
 import type { TakeLast } from './utils/TakeLast';
 
 type State = Array<Token | Expr>;
@@ -19,26 +18,34 @@ type ParseAbs<S extends State, TS extends Token[]> = S extends [
   TkLambda,
   EVar<infer P>,
   TkDot,
-  Expr
+  infer B extends Expr
 ]
   ? TS[0] extends TkSpace
     ? TS[1] extends TkLambda
-      ? EAbs<P, Assert<S[3], Expr>>
+      ? EAbs<P, B>
       : TS[1] extends TkLeftPar
-      ? EAbs<P, Assert<S[3], Expr>>
+      ? EAbs<P, B>
       : never
-    : EAbs<P, Assert<S[3], Expr>>
+    : EAbs<P, B>
   : never;
 
-type ParseApp<S extends State> = S extends [Expr, TkSpace, Expr]
-  ? EApp<Assert<S[0], Expr>, Assert<S[2], Expr>>
+type ParseApp<S extends State> = S extends [
+  infer F extends Expr,
+  TkSpace,
+  infer A extends Expr
+]
+  ? EApp<F, A>
   : never;
 
-type ParseParen<S extends State> = S extends [TkLeftPar, Expr, TkRightPar]
-  ? S[1]
+type ParseParen<S extends State> = S extends [
+  TkLeftPar,
+  infer T extends Expr,
+  TkRightPar
+]
+  ? T
   : never;
 
-type TryParse<S extends State, TS extends Token[]> =
+type ParseExpr<S extends State, TS extends Token[]> =
   | ParseParen<S>
   | ParseApp<S>
   | ParseAbs<S, TS>
@@ -50,25 +57,21 @@ type Reduce<
   TS extends Token[]
 > = S['length'] extends 0
   ? [CS, TS]
-  : TakeLast<S> extends [infer LS, infer L]
-  ? TryParse<Assert<[L, ...CS], State>, TS> extends never
-    ? Reduce<Assert<LS, State>, Assert<[L, ...CS], State>, TS>
-    : Reduce<
-        [...Assert<LS, State>, TryParse<Assert<[L, ...CS], State>, TS>],
-        [],
-        TS
-      >
+  : TakeLast<S> extends [infer LS extends State, infer L extends Token | Expr]
+  ? ParseExpr<[L, ...CS], TS> extends never
+    ? Reduce<LS, [L, ...CS], TS>
+    : Reduce<[...LS, ParseExpr<[L, ...CS], TS>], [], TS>
   : [CS, TS];
 
 type Shift<S extends State, TS extends Token[]> = TS extends [
-  infer T,
-  ...infer R
+  infer T extends Token,
+  ...infer R extends Token[]
 ]
-  ? Reduce<Assert<[...S, T], State>, [], Assert<R, Token[]>> extends [
-      infer NS,
-      infer NTS
+  ? Reduce<[...S, T], [], R> extends [
+      infer NS extends State,
+      infer NTS extends Token[]
     ]
-    ? Shift<Assert<NS, State>, Assert<NTS, Token[]>>
+    ? Shift<NS, NTS>
     : never
   : S['length'] extends 1
   ? [S[0], []]

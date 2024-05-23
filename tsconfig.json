@@ -6,6 +6,8 @@
     "noEmit": true,
     "module": "ESNext",
     "moduleResolution": "node",
-    "incremental": true
+    "incremental": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   }
 }
