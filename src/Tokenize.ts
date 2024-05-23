@@ -11,25 +11,24 @@ import type {
   TkLambda,
   TkLeftPar,
   TkRightPar,
-  TkSpace,
   TkVar,
 } from './data/Token';
 
 export type Tokenize<CS extends string> = CS extends `${infer C}${infer R}`
   ? [
-      C extends CLetter
-        ? TkVar<C>
+      ...(C extends CLetter
+        ? [TkVar<C>]
         : C extends CLambda
-        ? TkLambda
+        ? [TkLambda]
         : C extends CLeftPar
-        ? TkLeftPar
+        ? [TkLeftPar]
         : C extends CRightPar
-        ? TkRightPar
+        ? [TkRightPar]
         : C extends CDot
-        ? TkDot
+        ? [TkDot]
         : C extends CSpace
-        ? TkSpace
-        : never,
+        ? []
+        : never),
       ...Tokenize<R>
     ]
   : [];

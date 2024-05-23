@@ -10,12 +10,4 @@ export type TkRightPar = 'RightPar';
 
 export type TkDot = 'Dot';
 
-export type TkSpace = 'Space';
-
-export type Token =
-  | TkVar<CLetter>
-  | TkLambda
-  | TkLeftPar
-  | TkRightPar
-  | TkDot
-  | TkSpace;
+export type Token = TkVar<CLetter> | TkLambda | TkLeftPar | TkRightPar | TkDot;

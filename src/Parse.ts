@@ -5,7 +5,6 @@ import type {
   TkLeftPar,
   Token,
   TkRightPar,
-  TkSpace,
   TkVar,
 } from './data/Token';
 import type { TakeLast } from './utils/TakeLast';
@@ -20,18 +19,13 @@ type ParseAbs<S extends State, TS extends Token[]> = S extends [
   TkDot,
   infer B extends Expr
 ]
-  ? TS[0] extends TkSpace
-    ? TS[1] extends TkLambda
-      ? EAbs<P, B>
-      : TS[1] extends TkLeftPar
-      ? EAbs<P, B>
-      : never
+  ? TS[0] extends TkVar<any> | TkLambda | TkLeftPar
+    ? never
     : EAbs<P, B>
   : never;
 
 type ParseApp<S extends State> = S extends [
   infer F extends Expr,
-  TkSpace,
   infer A extends Expr
 ]
   ? EApp<F, A>

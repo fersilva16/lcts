@@ -1,5 +1,3 @@
-import type { Assert } from './Assert';
-
 export type TakeLast<XS extends unknown[]> = XS extends [infer X, ...infer YS]
   ? YS extends []
     ? [[], X]
