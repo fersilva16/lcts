@@ -1,5 +1,5 @@
 {
-  description = "Fernando's Blog";
+  description = "Lambda Calculus parser and interpreter made in TypeScript's type system";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs";
@@ -17,7 +17,7 @@
         devShell = with pkgs; mkShell {
           buildInputs = [
             nodejs
-            nodePackages.pnpm
+            bun
           ];
         };
       }

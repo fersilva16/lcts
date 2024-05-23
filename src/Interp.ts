@@ -1,29 +1,51 @@
 import type { EAbs, EApp, Expr, EVar } from './data/Expr';
-import { Overwrite } from './utils/Overwrite';
 
-type Substitute<
-  N extends string,
-  E extends Expr,
-  C extends Record<string, Expr>
-> = E extends EVar<N>
-  ? C[N]
+type FV<E extends Expr, C extends string[] = []> = E extends EVar<C[number]>
+  ? []
+  : E extends EVar<infer N>
+  ? [N]
   : E extends EAbs<infer P, infer B>
-  ? EAbs<P, Substitute<N, B, Overwrite<C, P, EVar<P>>>>
+  ? FV<B, [...C, P]>
   : E extends EApp<infer F, infer A>
-  ? EApp<Substitute<N, F, C>, Substitute<N, A, C>>
+  ? [...FV<F, C>, ...FV<A, C>]
+  : [];
+
+type Conversion<
+  E extends Expr,
+  N extends string,
+  X extends string
+> = E extends EVar<N>
+  ? EVar<X>
+  : E extends EAbs<N, infer B>
+  ? EAbs<X, Conversion<B, N, X>>
+  : E extends EApp<infer F, infer A>
+  ? EApp<Conversion<F, N, X>, Conversion<A, N, X>>
   : E;
 
-export type Interp<
+type Substitute<
   E extends Expr,
-  C extends Record<string, Expr> = {}
-> = E extends EVar<string>
+  N extends string,
+  V extends Expr
+> = E extends EVar<N>
+  ? V
+  : E extends EAbs<N, Expr>
   ? E
+  : E extends EAbs<infer P extends FV<V>[number], infer B>
+  ? Substitute<Conversion<E, P, `${P}'`>, N, V>
   : E extends EAbs<infer P, infer B>
-  ? EAbs<P, Interp<B, C>>
-  : E extends EApp<EAbs<infer P, infer B>, infer A>
-  ? Interp<Substitute<P, B, Overwrite<C, P, A>>, Overwrite<C, P, A>>
-  : E extends EApp<EVar<infer N>, infer A>
-  ? EApp<EVar<N>, Interp<A, C>>
+  ? EAbs<P, Substitute<B, N, V>>
   : E extends EApp<infer F, infer A>
-  ? Interp<EApp<Interp<F, C>, Interp<A, C>>, C>
-  : never;
+  ? EApp<Substitute<F, N, V>, Substitute<A, N, V>>
+  : E;
+
+export type Interp<E extends Expr> = E extends EAbs<infer P, infer B>
+  ? EAbs<P, Interp<B>>
+  : E extends EApp<EAbs<infer P, infer B>, infer A>
+  ? Interp<Substitute<B, P, A>>
+  : E extends EApp<infer F, infer A>
+  ? Interp<F> extends infer IF
+    ? IF extends EAbs<string, Expr>
+      ? Interp<EApp<IF, Interp<A>>>
+      : EApp<IF, Interp<A>>
+    : E
+  : E;
