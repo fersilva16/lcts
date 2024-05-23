@@ -34,6 +34,6 @@ export type CRightPar = ')';
 
 export type CDot = '.';
 
-export type CSpace = ' ';
+export type CSpace = ' ' | '\n' | '\r' | '\t';
 
 export type Char = CLetter | CLambda | CLeftPar | CRightPar | CDot | CSpace;

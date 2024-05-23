@@ -30,7 +30,7 @@ type Substitute<
   ? V
   : E extends EAbs<N, Expr>
   ? E
-  : E extends EAbs<infer P extends FV<V>[number], infer B>
+  : E extends EAbs<infer P extends FV<V>[number], any>
   ? Substitute<Conversion<E, P, `${P}'`>, N, V>
   : E extends EAbs<infer P, infer B>
   ? EAbs<P, Substitute<B, N, V>>
@@ -43,9 +43,7 @@ export type Interp<E extends Expr> = E extends EAbs<infer P, infer B>
   : E extends EApp<EAbs<infer P, infer B>, infer A>
   ? Interp<Substitute<B, P, A>>
   : E extends EApp<infer F, infer A>
-  ? Interp<F> extends infer IF
-    ? IF extends EAbs<string, Expr>
-      ? Interp<EApp<IF, Interp<A>>>
-      : EApp<IF, Interp<A>>
-    : E
+  ? Interp<F> extends EAbs<string, Expr>
+    ? Interp<EApp<Interp<F>, Interp<A>>>
+    : EApp<Interp<F>, Interp<A>>
   : E;
