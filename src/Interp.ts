@@ -1,14 +1,14 @@
 import type { EAbs, EApp, Expr, EVar } from './data/Expr';
 
 type FV<E extends Expr, C extends string[] = []> = E extends EVar<C[number]>
-  ? []
+  ? never
   : E extends EVar<infer N>
-  ? [N]
+  ? N
   : E extends EAbs<infer P, infer B>
   ? FV<B, [...C, P]>
   : E extends EApp<infer F, infer A>
-  ? [...FV<F, C>, ...FV<A, C>]
-  : [];
+  ? FV<F, C> | FV<A, C>
+  : never;
 
 type Conversion<
   E extends Expr,
@@ -30,7 +30,7 @@ type Substitute<
   ? V
   : E extends EAbs<N, Expr>
   ? E
-  : E extends EAbs<infer P extends FV<V>[number], any>
+  : E extends EAbs<infer P extends FV<V>, any>
   ? Substitute<Conversion<E, P, `${P}'`>, N, V>
   : E extends EAbs<infer P, infer B>
   ? EAbs<P, Substitute<B, N, V>>

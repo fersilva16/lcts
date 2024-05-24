@@ -17,6 +17,7 @@
         devShell = with pkgs; mkShell {
           buildInputs = [
             nodejs
+            nodePackages.pnpm
             bun
           ];
         };
