@@ -14,21 +14,22 @@ import type {
   TkVar,
 } from './data/Token';
 
-export type Tokenize<CS extends string> = CS extends `${infer C}${infer R}`
-  ? [
-      ...(C extends CLetter
-        ? [TkVar<C>]
-        : C extends CLambda
-        ? [TkLambda]
-        : C extends CLeftPar
-        ? [TkLeftPar]
-        : C extends CRightPar
-        ? [TkRightPar]
-        : C extends CDot
-        ? [TkDot]
-        : C extends CSpace
-        ? []
-        : never),
-      ...Tokenize<R>
-    ]
-  : [];
+export type Tokenize<Chars extends string> =
+  Chars extends `${infer Char}${infer Rest}`
+    ? [
+        ...(Char extends CLetter
+          ? [TkVar<Char>]
+          : Char extends CLambda
+          ? [TkLambda]
+          : Char extends CLeftPar
+          ? [TkLeftPar]
+          : Char extends CRightPar
+          ? [TkRightPar]
+          : Char extends CDot
+          ? [TkDot]
+          : Char extends CSpace
+          ? []
+          : never),
+        ...Tokenize<Rest>
+      ]
+    : [];

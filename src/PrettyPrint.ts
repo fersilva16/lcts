@@ -1,28 +1,31 @@
 import type { EAbs, EApp, Expr, EVar } from './data/Expr';
 
-export type PrettyPrint<E extends Expr> = E extends EVar<infer N>
-  ? N
-  : E extends EAbs<infer P, infer B extends EApp<EVar<string>, EVar<string>>>
-  ? `λ${P}.${PrettyPrint<B>}`
-  : E extends EAbs<infer P, infer B extends EApp<Expr, Expr>>
-  ? `λ${P}.(${PrettyPrint<B>})`
-  : E extends EAbs<infer P, infer B>
-  ? `λ${P}.${PrettyPrint<B>}`
-  : E extends EApp<
-      infer F extends EApp<Expr, Expr>,
-      infer A extends EApp<Expr, Expr>
+export type PrettyPrint<Node extends Expr> = Node extends EVar<infer Name>
+  ? Name
+  : Node extends EAbs<
+      infer Param,
+      infer Body extends EApp<EVar<string>, EVar<string>>
     >
-  ? `(${PrettyPrint<F>}) (${PrettyPrint<A>})`
-  : E extends EApp<
-      infer F extends EVar<string>,
-      infer A extends EApp<Expr, Expr>
+  ? `λ${Param}.${PrettyPrint<Body>}`
+  : Node extends EAbs<infer Param, infer Body extends EApp<Expr, Expr>>
+  ? `λ${Param}.(${PrettyPrint<Body>})`
+  : Node extends EAbs<infer Param, infer Body>
+  ? `λ${Param}.${PrettyPrint<Body>}`
+  : Node extends EApp<
+      infer Func extends EApp<Expr, Expr>,
+      infer Arg extends EApp<Expr, Expr>
     >
-  ? `${PrettyPrint<F>} (${PrettyPrint<A>})`
-  : E extends EApp<
-      infer F extends EAbs<string, Expr> | EApp<Expr, Expr>,
-      infer A
+  ? `(${PrettyPrint<Func>}) (${PrettyPrint<Arg>})`
+  : Node extends EApp<
+      infer Func extends EVar<string>,
+      infer Arg extends EApp<Expr, Expr>
     >
-  ? `(${PrettyPrint<F>}) ${PrettyPrint<A>}`
-  : E extends EApp<infer F, infer A>
-  ? `${PrettyPrint<F>} ${PrettyPrint<A>}`
+  ? `${PrettyPrint<Func>} (${PrettyPrint<Arg>})`
+  : Node extends EApp<
+      infer Func extends EAbs<string, Expr> | EApp<Expr, Expr>,
+      infer Arg
+    >
+  ? `(${PrettyPrint<Func>}) ${PrettyPrint<Arg>}`
+  : Node extends EApp<infer Func, infer Arg>
+  ? `${PrettyPrint<Func>} ${PrettyPrint<Arg>}`
   : never;
