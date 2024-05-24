@@ -1,0 +1,93 @@
+diff --git a/lib/tsc.js b/lib/tsc.js
+index f4e4fed2bc00f527e99135c39908081aad29163e..965a4fc8d33124219a42941410e7146457bae7e2 100644
+--- a/lib/tsc.js
++++ b/lib/tsc.js
+@@ -55209,7 +55209,7 @@ function createTypeChecker(host) {
+         }
+         let result;
+         const identity2 = getRecursionIdentity(t);
+-        if (stack.length < 10 || stack.length < 50 && !contains(stack, identity2)) {
++        if (false && !contains(stack, identity2)) {
+           stack.push(identity2);
+           result = computeBaseConstraint(getSimplifiedType(
+             t,
+@@ -58811,7 +58811,7 @@ function createTypeChecker(host) {
+     let extraTypes;
+     let tailCount = 0;
+     while (true) {
+-      if (tailCount === 1e3) {
++      if (false) {
+         error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+         return errorType;
+       }
+@@ -59840,7 +59840,7 @@ function createTypeChecker(host) {
+     if (!couldContainTypeVariables(type)) {
+       return type;
+     }
+-    if (instantiationDepth === 100 || instantiationCount >= 5e6) {
++    if (false) {
+       (_a = tracing) == null ? void 0 : _a.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+       error(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+       return errorType;
+diff --git a/lib/tsserver.js b/lib/tsserver.js
+index 3f1ce62663e3c32aa487f0fc7dcb3dd940e7cd24..74ee618bd90ed827941dffcc9e8e2f2255caea29 100644
+--- a/lib/tsserver.js
++++ b/lib/tsserver.js
+@@ -59953,7 +59953,7 @@ function createTypeChecker(host) {
+         }
+         let result;
+         const identity2 = getRecursionIdentity(t);
+-        if (stack.length < 10 || stack.length < 50 && !contains(stack, identity2)) {
++        if (false && !contains(stack, identity2)) {
+           stack.push(identity2);
+           result = computeBaseConstraint(getSimplifiedType(
+             t,
+@@ -63555,7 +63555,7 @@ function createTypeChecker(host) {
+     let extraTypes;
+     let tailCount = 0;
+     while (true) {
+-      if (tailCount === 1e3) {
++      if (false) {
+         error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+         return errorType;
+       }
+@@ -64584,7 +64584,7 @@ function createTypeChecker(host) {
+     if (!couldContainTypeVariables(type)) {
+       return type;
+     }
+-    if (instantiationDepth === 100 || instantiationCount >= 5e6) {
++    if (false) {
+       (_a = tracing) == null ? void 0 : _a.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+       error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+       return errorType;
+diff --git a/lib/typescript.js b/lib/typescript.js
+index 22053b17844ef8915f5e562c286aedf42e0550b9..2171e1cc27537c76842b85d239539fdbf9512f63 100644
+--- a/lib/typescript.js
++++ b/lib/typescript.js
+@@ -57708,7 +57708,7 @@ ${lanes.join("\n")}
+           }
+           let result;
+           const identity2 = getRecursionIdentity(t);
+-          if (stack.length < 10 || stack.length < 50 && !contains(stack, identity2)) {
++          if (false && !contains(stack, identity2)) {
+             stack.push(identity2);
+             result = computeBaseConstraint(getSimplifiedType(
+               t,
+@@ -61310,7 +61310,7 @@ ${lanes.join("\n")}
+       let extraTypes;
+       let tailCount = 0;
+       while (true) {
+-        if (tailCount === 1e3) {
++        if (false) {
+           error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+           return errorType;
+         }
+@@ -62339,7 +62339,7 @@ ${lanes.join("\n")}
+       if (!couldContainTypeVariables(type)) {
+         return type;
+       }
+-      if (instantiationDepth === 100 || instantiationCount >= 5e6) {
++      if (false) {
+         (_a = tracing) == null ? void 0 : _a.instant(tracing.Phase.CheckTypes, "instantiateType_DepthLimit", { typeId: type.id, instantiationDepth, instantiationCount });
+         error2(currentNode, Diagnostics.Type_instantiation_is_excessively_deep_and_possibly_infinite);
+         return errorType;
