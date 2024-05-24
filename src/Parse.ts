@@ -9,66 +9,69 @@ import type {
 } from './data/Token';
 import type { TakeLast } from './utils/TakeLast';
 
-type State = Array<Token | Expr>;
+type ParseState = Array<Token | Expr>;
 
-type ParseVar<S extends State> = S extends [TkVar<infer N>] ? EVar<N> : never;
+type ParseVar<State extends ParseState> = State extends [TkVar<infer Name>]
+  ? EVar<Name>
+  : never;
 
-type ParseAbs<S extends State, TS extends Token[]> = S extends [
-  TkLambda,
-  EVar<infer P>,
-  TkDot,
-  infer B extends Expr
-]
-  ? TS[0] extends TkVar<any> | TkLambda | TkLeftPar
+type ParseAbs<
+  State extends ParseState,
+  Tokens extends Token[]
+> = State extends [TkLambda, EVar<infer Param>, TkDot, infer Body extends Expr]
+  ? Tokens[0] extends TkVar<any> | TkLambda | TkLeftPar
     ? never
-    : EAbs<P, B>
+    : EAbs<Param, Body>
   : never;
 
-type ParseApp<S extends State> = S extends [
-  infer F extends Expr,
-  infer A extends Expr
+type ParseApp<State extends ParseState> = State extends [
+  infer Func extends Expr,
+  infer Arg extends Expr
 ]
-  ? EApp<F, A>
+  ? EApp<Func, Arg>
   : never;
 
-type ParseParen<S extends State> = S extends [
+type ParseParen<S extends ParseState> = S extends [
   TkLeftPar,
-  infer T extends Expr,
+  infer Node extends Expr,
   TkRightPar
 ]
-  ? T
+  ? Node
   : never;
 
-type ParseExpr<S extends State, TS extends Token[]> =
-  | ParseParen<S>
-  | ParseApp<S>
-  | ParseAbs<S, TS>
-  | ParseVar<S>;
+type ParseExpr<State extends ParseState, Tokens extends Token[]> =
+  | ParseParen<State>
+  | ParseApp<State>
+  | ParseAbs<State, Tokens>
+  | ParseVar<State>;
 
 type Reduce<
-  S extends State,
-  CS extends State,
-  TS extends Token[]
-> = S['length'] extends 0
-  ? [CS, TS]
-  : TakeLast<S> extends [infer LS extends State, infer L extends Token | Expr]
-  ? ParseExpr<[L, ...CS], TS> extends never
-    ? Reduce<LS, [L, ...CS], TS>
-    : Reduce<[...LS, ParseExpr<[L, ...CS], TS>], [], TS>
-  : [CS, TS];
-
-type Shift<S extends State, TS extends Token[]> = TS extends [
-  infer T extends Token,
-  ...infer R extends Token[]
-]
-  ? Reduce<[...S, T], [], R> extends [
-      infer NS extends State,
-      infer NTS extends Token[]
+  State extends ParseState,
+  FinalState extends ParseState,
+  Tokens extends Token[]
+> = State['length'] extends 0
+  ? [FinalState, Tokens]
+  : TakeLast<State> extends [
+      infer Rest extends ParseState,
+      infer Node extends Token | Expr
     ]
-    ? Shift<NS, NTS>
+  ? ParseExpr<[Node, ...FinalState], Tokens> extends never
+    ? Reduce<Rest, [Node, ...FinalState], Tokens>
+    : Reduce<[...Rest, ParseExpr<[Node, ...FinalState], Tokens>], [], Tokens>
+  : [FinalState, Tokens];
+
+type Shift<State extends ParseState, Tokens extends Token[]> = Tokens extends [
+  infer FirstToken extends Token,
+  ...infer Rest extends Token[]
+]
+  ? Reduce<[...State, FirstToken], [], Rest> extends [
+      infer Nodes extends ParseState,
+      infer Tokens extends Token[]
+    ]
+    ? Shift<Nodes, Tokens>
     : never
-  : S['length'] extends 1
-  ? [S[0], []]
+  : State['length'] extends 1
+  ? [State[0], []]
   : never;
 
-export type Parse<TS extends Token[]> = Shift<[], TS>;
+export type Parse<Tokens extends Token[]> = Shift<[], Tokens>;

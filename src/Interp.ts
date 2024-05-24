@@ -1,49 +1,54 @@
 import type { EAbs, EApp, Expr, EVar } from './data/Expr';
 
-type FV<E extends Expr, C extends string[] = []> = E extends EVar<C[number]>
+type FV<Node extends Expr, Context extends string[] = []> = Node extends EVar<
+  Context[number]
+>
   ? never
-  : E extends EVar<infer N>
-  ? N
-  : E extends EAbs<infer P, infer B>
-  ? FV<B, [...C, P]>
-  : E extends EApp<infer F, infer A>
-  ? FV<F, C> | FV<A, C>
+  : Node extends EVar<infer Name>
+  ? Name
+  : Node extends EAbs<infer Param, infer Body>
+  ? FV<Body, [...Context, Param]>
+  : Node extends EApp<infer Func, infer Arg>
+  ? FV<Func, Context> | FV<Arg, Context>
   : never;
 
 type Conversion<
-  E extends Expr,
-  N extends string,
-  X extends string
-> = E extends EVar<N>
-  ? EVar<X>
-  : E extends EAbs<N, infer B>
-  ? EAbs<X, Conversion<B, N, X>>
-  : E extends EApp<infer F, infer A>
-  ? EApp<Conversion<F, N, X>, Conversion<A, N, X>>
-  : E;
+  Node extends Expr,
+  Name extends string,
+  NewName extends string
+> = Node extends EVar<Name>
+  ? EVar<NewName>
+  : Node extends EAbs<Name, infer Body>
+  ? EAbs<NewName, Conversion<Body, Name, NewName>>
+  : Node extends EApp<infer Func, infer Arg>
+  ? EApp<Conversion<Func, Name, NewName>, Conversion<Arg, Name, NewName>>
+  : Node;
 
 type Substitute<
-  E extends Expr,
-  N extends string,
-  V extends Expr
-> = E extends EVar<N>
-  ? V
-  : E extends EAbs<N, Expr>
-  ? E
-  : E extends EAbs<infer P extends FV<V>, any>
-  ? Substitute<Conversion<E, P, `${P}'`>, N, V>
-  : E extends EAbs<infer P, infer B>
-  ? EAbs<P, Substitute<B, N, V>>
-  : E extends EApp<infer F, infer A>
-  ? EApp<Substitute<F, N, V>, Substitute<A, N, V>>
-  : E;
+  Node extends Expr,
+  Name extends string,
+  Value extends Expr
+> = Node extends EVar<Name>
+  ? Value
+  : Node extends EAbs<Name, Expr>
+  ? Node
+  : Node extends EAbs<infer Param extends FV<Value>, any>
+  ? Substitute<Conversion<Node, Param, `${Param}'`>, Name, Value>
+  : Node extends EAbs<infer Param, infer Body>
+  ? EAbs<Param, Substitute<Body, Name, Value>>
+  : Node extends EApp<infer Func, infer Arg>
+  ? EApp<Substitute<Func, Name, Value>, Substitute<Arg, Name, Value>>
+  : Node;
 
-export type Interp<E extends Expr> = E extends EAbs<infer P, infer B>
-  ? EAbs<P, Interp<B>>
-  : E extends EApp<EAbs<infer P, infer B>, infer A>
-  ? Interp<Substitute<B, P, A>>
-  : E extends EApp<infer F, infer A>
-  ? Interp<F> extends EAbs<string, Expr>
-    ? Interp<EApp<Interp<F>, Interp<A>>>
-    : EApp<Interp<F>, Interp<A>>
-  : E;
+export type Interp<Node extends Expr> = Node extends EAbs<
+  infer Param,
+  infer Boby
+>
+  ? EAbs<Param, Interp<Boby>>
+  : Node extends EApp<EAbs<infer Param, infer Body>, infer Arg>
+  ? Interp<Substitute<Body, Param, Arg>>
+  : Node extends EApp<infer Func, infer Arg>
+  ? Interp<Func> extends EAbs<string, Expr>
+    ? Interp<EApp<Interp<Func>, Interp<Arg>>>
+    : EApp<Interp<Func>, Interp<Arg>>
+  : Node;
